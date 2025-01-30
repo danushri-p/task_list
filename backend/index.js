@@ -32,14 +32,23 @@ mongoose.connect(process.env.MONGODB_URI)
 app.get('/tasks', async (req, res) => {
     console.log('Fetching tasks...');
     try {
-        const tasks = await Task.find().sort({ createdAt: -1 }); // Sort by newest first
+        const tasks = await Task.find().sort({ createdAt: -1 }); 
         res.json(tasks);
     } catch (err) {
         console.error('Error fetching tasks:', err);
         res.status(500).json({ message: 'Server Error' });
     }
 });
+app.post('/create-task',async(req,res)=>{
+    try{
+        const task = new Task(req.body);
+        await task.save();
+        res.json(task);
+        }catch(err){
+            console.error('error creating',err);
+            res.status(500).json({ message: 'Server Error' });
+        } 
+});
 
 
-// Write an endpoint to create a new task.
 
